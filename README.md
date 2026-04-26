@@ -10,6 +10,10 @@
   Soft Shell · Huggable · Companionable · Mobile
 </p>
 
+<p align="center">
+  <img src="assets/poster.jpg" alt="开源大白计划海报" width="600">
+</p>
+
 ---
 
 ## 项目愿景 | Vision
@@ -18,33 +22,36 @@
 
 Our goal is to build a truly open-source home companion robot — like Baymax from *Big Hero 6* — with a soft, safe shell, warm interactive capabilities, and autonomous mobility.
 
-## 技术路线 | Technical Roadmap
+## 系统架构 | System Architecture
 
 ```
-├── 一、机械方向 (Mechanical)
-│   ├── 壳体结构设计
-│   ├── 传动结构设计
-│   ├── 机构集成与装配
-│   └── 材料与原型优化
-│
-├── 二、硬件 / 电机方向 (Hardware / Motors)
-│   ├── PCB 设计
-│   ├── 电机选型
-│   ├── 驱动与供电系统
-│   └── 嵌入式控制开发
-│
-├── 三、智能感知 (Perception)
-│   ├── 语音交互
-│   ├── 视觉感知
-│   ├── 状态 / 姿态识别
-│   └── 多传感器融合
-│
-└── 四、运控 / SLAM / RL (Motion Control)
-    ├── 运动控制
-    ├── 定位与建图 (SLAM)
-    ├── 路径规划
-    └── 强化学习控制
+┌─────────────────────────────────────────────────┐
+│          Layer 3: AI Brain / 大脑层              │
+│   LLM 调用 · Agent 框架 · 语音交互 · 多模态决策   │
+├─────────────────────────────────────────────────┤
+│          Layer 2: ROS2 中间件层                  │
+│   视觉感知 · SLAM · 导航 · 运动规划 · 传感器融合   │
+├─────────────────────────────────────────────────┤
+│          Layer 1: 硬件抽象层 / 固件层             │
+│   电机驱动 · 传感器读取 · 实时控制 · micro-ROS    │
+└─────────────────────────────────────────────────┘
 ```
+
+## 技术路线 | Technical Roadmap
+
+| 层级 | 模块 | 技术栈 |
+|------|------|--------|
+| AI Brain | LLM 对话与决策 | Claude API / LangChain / Tool Use |
+| AI Brain | 语音交互 | Whisper (ASR) + ChatTTS (TTS) |
+| AI Brain | 多模态理解 | 视觉 + 语音 + 传感器 → LLM 综合判断 |
+| ROS2 | 视觉感知 | OpenCV / YOLO + ROS2 节点 |
+| ROS2 | SLAM + 导航 | Nav2 + SLAM Toolbox |
+| ROS2 | 传感器融合 | robot_localization (EKF) |
+| ROS2 | 运动控制 | 自定义控制节点 + MoveIt2 |
+| 固件层 | 电机 / 传感器驱动 | STM32 / ESP32 + micro-ROS |
+| 固件层 | 力 / 光 / 热传感 | I2C / SPI 驱动 → micro-ROS Topic |
+| 硬件 | PCB / 电路 | KiCad |
+| 机械 | 本体 / 软壳 | FreeCAD / SolidWorks |
 
 ## 项目阶段 | Phases
 
@@ -58,14 +65,26 @@ Our goal is to build a truly open-source home companion robot — like Baymax fr
 
 ```
 open-dabai/
-├── mechanical/       # 机械结构设计文件
-├── hardware/         # 硬件 / PCB / 电路设计
-├── firmware/         # 嵌入式固件代码
-├── perception/       # 视觉、语音、传感器感知模块
-├── control/          # 运动控制、SLAM、路径规划
-├── simulation/       # 仿真环境与模型
-├── docs/             # 项目文档与教程
-└── assets/           # 图片、视频、宣传资料
+├── brain/                    # Layer 3: AI 大脑
+│   ├── llm/                  #   LLM 接口与 Agent 调用
+│   ├── speech/               #   语音交互 (ASR / TTS)
+│   └── decision/             #   意图理解与决策
+├── ros2_ws/src/              # Layer 2: ROS2 工作空间
+│   ├── dabai_bringup/        #   启动与配置
+│   ├── dabai_perception/     #   视觉感知节点
+│   ├── dabai_navigation/     #   SLAM + 导航
+│   ├── dabai_control/        #   运动控制
+│   ├── dabai_sensors/        #   传感器驱动与融合
+│   └── dabai_interfaces/     #   自定义 msg / srv / action
+├── firmware/                 # Layer 1: 嵌入式固件
+│   ├── motor_driver/         #   电机驱动
+│   ├── sensor_board/         #   传感器板固件
+│   └── micro_ros_agent/      #   micro-ROS 桥接
+├── mechanical/               # 机械结构设计
+├── hardware/                 # PCB / 电路设计
+├── simulation/               # Gazebo / Isaac Sim 仿真
+├── docs/                     # 项目文档与教程
+└── assets/                   # 图片、视频、宣传资料
 ```
 
 ## 先行应用场景 | Target Applications
