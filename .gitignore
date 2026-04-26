@@ -1,0 +1,56 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.egg
+
+# C/C++
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dylib
+
+# ROS
+devel/
+install/
+log/
+
+# CAD temp files
+*.bak
+*.tmp
+~$*
+
+# Build
+build/
+cmake-build-*/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data files (too large for git)
+*.bag
+*.pcd
+*.ply
+*.stl.bak
+
+# Environment
+.env
+*.key
+*.pem
